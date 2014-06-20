@@ -33,39 +33,38 @@ rankall <- function(outcome, num = "best") {
   ## remove invalid data
   data_set <- subset(data_set, good)
   
-  ## build list of states to be checked
+  ## build list of states to be checked (and put in alphabetical order)
   statelist <- unique(data_set$State)
+  ordstlist <- order(statelist)
+  statelist <- statelist[ordstlist]
   
-  ## initialize data frame for results
-  df <- data.frame(0,2)
-  names(df) <- c("Hospital.Name","State")
-  df_ix <- 1
-  
+  return_data <- data.frame()
+ 
   for (state in statelist) {
     ## pull the state info
     ## grab subset based on state
     state_data <- subset( data_set, State==state )
     
-    ## get the ordering
+    ## sort the data within the state
     ordst <- order(state_data[[death_rate_column_name]],state_data$Hospital.Name)
     sorted_data <- state_data[ordst,]   
     
     if (num == "best" ) {
-      df[df_ix]$Hospital.Name <- sorted_data[1,]$Hospital.Name 
+      hospital <- sorted_data[1,]$Hospital.Name 
     } else if (num == "worst") {
       ## get index of last item
       index <- nrow( sorted_data )
-      df[df_ix]$Hospital.Name <- sorted_data[index,]$Hospital.Name 
+      hospital <- sorted_data[index,]$Hospital.Name 
     } else {
       index <- nrow( sorted_data )
       if (num > index) {
-        df[df_ix]$Hospital.Name <- NA
+        hospital <- NA
       } else {
-        df[df_ix]$Hospital.Name <- sorted_data[index,]$Hospital.Name 
+        hospital <- sorted_data[index,]$Hospital.Name 
       }
     }
-    df[df_ix]$State <- state
-    df_ix <- df_ix + 1
+    row <- c(hospital, state)
+    return_data <- rbind(return_data, row)
   }
-  return(df)
+  return(return_data)
 }
