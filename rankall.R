@@ -61,7 +61,7 @@ rankall <- function(outcome, num = "best") {
       if (num > index) {
         hospital <- NA
       } else {
-        hospital <- sorted_data[index,]$Hospital.Name 
+        hospital <- sorted_data[num,]$Hospital.Name 
       }
     }
     row <- c(hospital, state)
