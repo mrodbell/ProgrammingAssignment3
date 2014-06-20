@@ -38,7 +38,8 @@ rankall <- function(outcome, num = "best") {
   ordstlist <- order(statelist)
   statelist <- statelist[ordstlist]
   
-  return_data <- data.frame()
+  return_data <- data.frame (hospital=integer(0), state=integer(0) )
+  returnix <-1
  
   for (state in statelist) {
     ## pull the state info
@@ -64,7 +65,8 @@ rankall <- function(outcome, num = "best") {
       }
     }
     row <- c(hospital, state)
-    return_data <- rbind(return_data, row)
+    return_data[returnix,] <- row
+    returnix <- returnix + 1
   }
   return(return_data)
 }
